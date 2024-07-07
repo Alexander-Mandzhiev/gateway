@@ -1,52 +1,63 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { TaskDto, UpdateOrderDto } from './dto/task.dto';
 import { ClientProxy } from '@nestjs/microservices';
+import { SandingTask, UpdateTaskOrderDto } from 'src/types/tasks.types';
 
 @Injectable()
 export class TasksService {
-  constructor(@Inject("TASKS_SERVICE") private cabbitClient: ClientProxy) { }
+  constructor(@Inject("PROJECTS_SERVICE") private client: ClientProxy) { }
 
-  async create(dto: TaskDto) {
-    this.cabbitClient.send("task-create", dto)
-  }
-
-  async findAll(statusId: string) {
+  async create(userId: string, dto: TaskDto) {
     try {
-      return await 3
+      const sanding: SandingTask = { userId, projectId: dto.projectId, statusId: dto.statusId, name: dto.name, description: dto.description }
+      return this.client.send({ cmd: "create-task" }, sanding)
     } catch (error) {
-      throw new HttpException(`Произошла ошибка получения задач! ${error}`, HttpStatus.BAD_REQUEST)
+      throw new HttpException(`Произошла ошибка получения задач! ${error}`, HttpStatus.FORBIDDEN)
     }
   }
 
-  async findOne(statusId: string, id: string) {
+  async findAll(userId: string, projectId: string, statusId: string) {
     try {
-      return await 4
+      const sanding: SandingTask = { userId, projectId, statusId }
+      return this.client.send({ cmd: "get-all-tasks" }, sanding)
     } catch (error) {
-      throw new HttpException(`Произошла ошибка получения задачи! ${error}`, HttpStatus.BAD_REQUEST)
+      throw new HttpException(`Произошла ошибка получения задач! ${error}`, HttpStatus.FORBIDDEN)
     }
   }
 
-  async update(id: string, dto: TaskDto) {
+  async findOne(userId: string, projectId: string, statusId: string, id: string) {
     try {
-      return await 4
+      const sanding: SandingTask = { userId, projectId, statusId, id }
+      return this.client.send({ cmd: "get-one-task" }, sanding)
     } catch (error) {
-      throw new HttpException(`Произошла ошибка обновления задачи! ${error}`, HttpStatus.BAD_REQUEST)
+      throw new HttpException(`Произошла ошибка получения задачи! ${error}`, HttpStatus.FORBIDDEN)
     }
   }
 
-  async remove(id: string) {
+  async update(userId: string, id: string, dto: TaskDto) {
     try {
-      return await 4
+      const sanding: SandingTask = { userId, id, projectId: dto.projectId, statusId: dto.statusId, name: dto.name, description: dto.description }
+      return this.client.send({ cmd: "update-task" }, sanding)
     } catch (error) {
-      throw new HttpException(`Произошла ошибка удаления задачи! ${error}`, HttpStatus.BAD_REQUEST)
+      throw new HttpException(`Произошла ошибка обновления задачи! ${error}`, HttpStatus.FORBIDDEN)
     }
   }
 
-  async updateOrderTasks(dto: UpdateOrderDto) {
+  async remove(userId: string, projectId: string, statusId: string, id: string) {
     try {
-      return await 4
+      const sanding: SandingTask = { userId, projectId, statusId, id }
+      return this.client.send({ cmd: "delete-task" }, sanding)
     } catch (error) {
-      throw new HttpException(`Произошла ошибка обновления порядка задачи!`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Произошла ошибка удаления задачи! ${error}`, HttpStatus.FORBIDDEN)
+    }
+  }
+
+  async updateOrderTasks(userId: string, dto: UpdateOrderDto) {
+    try {
+      const sanding: UpdateTaskOrderDto = { userId, projectId: dto.projectId, statusId: dto.statusId, ids: dto.ids }
+      return this.client.send({ cmd: "update-order-tasks" }, sanding)
+    } catch (error) {
+      throw new HttpException(`Произошла ошибка обновления порядка задачи!`, HttpStatus.FORBIDDEN);
     }
   }
 }

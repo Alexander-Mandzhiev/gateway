@@ -85,3 +85,19 @@ export class UpdateOrderTasksResponse {
     })
     response: []
 }
+
+export class SandingTask {
+    readonly userId?: string
+    readonly projectId?: string
+    readonly statusId?: string
+    readonly name?: string
+    readonly description?: string
+    readonly id?: string
+}
+
+export type UpdateTaskOrderDto = {
+    readonly userId?: string
+    readonly projectId?: string
+    readonly statusId: string
+    readonly ids?: [string]
+}

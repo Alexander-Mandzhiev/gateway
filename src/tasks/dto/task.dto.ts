@@ -4,6 +4,12 @@ import { TASK_RULE_LENGTH } from "src/config/util";
 
 
 export class StatusIdDto {
+
+    @ApiProperty({ description: 'Уникальный идентификатор проекта', example: "clx25gfmp00037r4g2jg2vete" })
+    @IsNotEmpty()
+    @IsString()
+    readonly projectId?: string
+
     @ApiProperty({ description: 'Уникальный идентификатор проекта', example: "clx31ne1700013pzzcen2jla2" })
     @IsNotEmpty()
     @IsString()
@@ -11,6 +17,7 @@ export class StatusIdDto {
 }
 
 export class TaskDto extends StatusIdDto {
+
     @ApiProperty({ description: 'Название задачи', example: "to do" })
     @IsNotEmpty()
     @IsString()

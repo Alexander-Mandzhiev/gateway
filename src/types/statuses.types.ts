@@ -32,3 +32,17 @@ export class UpdateOrderStatusesResponse {
     })
     response: []
 }
+
+export type SandStatustDto = {
+    userId?: string;
+    projectId?: string
+    id?: string
+    name?: string;
+    order?: string;
+}
+
+export type SandStatustUpdateOrderDto = {
+    readonly userId?: string;
+    readonly projectId?: string
+    readonly ids?: [string]
+}

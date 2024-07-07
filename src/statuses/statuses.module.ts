@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { TasksService } from './tasks.service';
-import { TasksController } from './tasks.controller';
+import { StatusesService } from './statuses.service';
+import { StatusesController } from './statuses.controller';
 import { PrismaService } from 'src/prisma.service';
+import { ProjectsService } from 'src/projects/projects.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
@@ -17,8 +18,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       }
     ]),
   ],
-  controllers: [TasksController],
-  providers: [TasksService, PrismaService],
-  exports: [TasksService]
+  controllers: [StatusesController],
+  providers: [StatusesService, PrismaService, ProjectsService],
+  exports: [StatusesService]
 })
-export class TasksModule { }
+export class StatusesModule { }

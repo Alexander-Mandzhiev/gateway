@@ -14,9 +14,9 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) { }
 
   @ApiBody({ type: ProjectDto })
-  //@ApiOkResponse({ type: CreateProjectsResponse })
+  @ApiOkResponse({ type: CreateProjectsResponse })
   @UsePipes(new ValidationPipe())
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   create(@CurrentUser('id') id: string, @Body() dto: ProjectDto) {
     return this.projectsService.create(id, dto);
