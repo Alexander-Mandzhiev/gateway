@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { StatusesService } from './statuses.service';
-import { StatusesController } from './statuses.controller';
+import { TaskFieldValuesService } from './task-field-values.service';
+import { TaskFieldValuesController } from './task-field-values.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
@@ -16,7 +16,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       }
     ]),
   ],
-  controllers: [StatusesController],
-  providers: [StatusesService],
+  controllers: [TaskFieldValuesController],
+  providers: [TaskFieldValuesService],
 })
-export class StatusesModule { }
+export class TaskFieldValuesModule { }

@@ -1,10 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { IBase } from "./IBase"
 
-type TypeField = {
+export interface TypeField {
     string: 'string';
     integer: 'integer';
     enum: 'enum';
+}
+export enum EnumTypeField {
+    'string',
+    'integer',
+    'enum'
 }
 
 export class CreateProjectFieldResponse extends IBase {
@@ -24,19 +29,60 @@ export class ProjectFieldsResponse {
     @ApiProperty({
         example: [
             {
-                "id": "clxhltfdv0008cbz4oh8opvqa",
-                "name": "Приоритет",
-                "field": "enum"
+                "id": "clycnrm5h0001di9lilvz22gi",
+                "name": "Время выполнения - upd",
+                "field": "integer",
+                "taskFieldsEnumValue": []
             },
             {
-                "id": "clxhlvanr000gcbz47ag7fv4d",
+                "id": "clycnxef90003di9lkb8slxlq",
                 "name": "Исполнитель",
-                "field": "string"
+                "field": "string",
+                "taskFieldsEnumValue": []
             },
             {
-                "id": "clxhlvrzq000icbz4n91byakc",
-                "name": "Время выполнения",
-                "field": "integer"
+                "id": "clyco1fyl000bdi9lb4sqmfwa",
+                "name": "Приоритет выполнения",
+                "field": "enum",
+                "taskFieldsEnumValue": [
+                    {
+                        "id": "clycrqrgc000111w54opn13tw",
+                        "name": "Низкий",
+                        "taskFieldId": "clyco1fyl000bdi9lb4sqmfwa"
+                    },
+                    {
+                        "id": "clycrqrgc000311w50xvsb3l5",
+                        "name": "Средний",
+                        "taskFieldId": "clyco1fyl000bdi9lb4sqmfwa"
+                    },
+                    {
+                        "id": "clycrqrgc000511w58ssga5vm",
+                        "name": "Высокий",
+                        "taskFieldId": "clyco1fyl000bdi9lb4sqmfwa"
+                    }
+                ]
+            },
+            {
+                "id": "clycodh9z0001gy83e9tn7wlh",
+                "name": "Срок выполнения",
+                "field": "enum",
+                "taskFieldsEnumValue": [
+                    {
+                        "id": "clycr94bo0001104kj9or5l5q",
+                        "name": "1 час",
+                        "taskFieldId": "clycodh9z0001gy83e9tn7wlh"
+                    },
+                    {
+                        "id": "clycr94bo0003104k5ntaah41",
+                        "name": "2 часа",
+                        "taskFieldId": "clycodh9z0001gy83e9tn7wlh"
+                    },
+                    {
+                        "id": "clycr94bo0005104ks6sl258q",
+                        "name": "3 часа",
+                        "taskFieldId": "clycodh9z0001gy83e9tn7wlh"
+                    }
+                ]
             }
         ]
     })
@@ -95,4 +141,24 @@ export class ResponseEnum {
     })
     response: ResponseCreateEnumValues[]
 
+}
+
+
+export type SandingProjectIdTaskFields = {
+    readonly userId?: string
+    readonly projectId?: string
+}
+
+export type SandingDeleteTaskFieldDto = SandingProjectIdTaskFields & {
+    readonly id?: string
+}
+
+export type SandingUpdateTaskFieldDto = SandingDeleteTaskFieldDto & {
+    readonly id?: string
+    readonly name?: string
+}
+
+export type SandingCreateTaskFieldDto = SandingProjectIdTaskFields & {
+    readonly name?: string
+    readonly field?: TypeField
 }

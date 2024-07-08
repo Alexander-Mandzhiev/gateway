@@ -4,10 +4,10 @@ import { StatusesResponse } from "./statuses.types";
 
 
 export type SandProjectDto = {
-    userId?: string;
-    name?: string;
-    description?: string;
-    id?: string
+    readonly userId?: string;
+    readonly name?: string;
+    readonly description?: string;
+    readonly id?: string
 }
 
 export class CreateProjectsResponse extends IBaseExtended {
