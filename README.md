@@ -8,8 +8,8 @@ REFRESH_JWT_EXPIRATION_TIME=1
 DOMAIN=localhost
 REFRESH_TOKEN_NAME="refreshToken"
 
-JWT_SECRET_KEY="12wgWqbyw43afwef2eWGEg43t2S4qt"
-JWT_REFRESH_TOKEN="5ewgfzhheracqfsszdxz412wgWqbyw43afwef2eWGEg43t2S4qtvt2q32y2f2eWGEWfEWf4efa"
+JWT_SECRET_KEY="You secret jwt access token key"
+JWT_REFRESH_TOKEN="You secret jwt refresh token key"
 
 RULE_MESSAGE="Данное поле должно быть длиной не менее 2 символов."
 RULE_MESSAGE_LENGTH=2
