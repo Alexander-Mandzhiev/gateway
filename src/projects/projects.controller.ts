@@ -31,8 +31,8 @@ export class ProjectsController {
 
   @ApiOkResponse({ type: ProjectsResponse })
   @HttpCode(HttpStatus.OK)
-  @Get(':id')
-  findOne(@CurrentUser('id') userId: string, @Param('id') id: string) {
+  @Get(':project_id')
+  findOne(@CurrentUser('id') userId: string, @Param('project_id') id: string) {
     return this.projectsService.findOne(userId, id);
   }
 
@@ -40,15 +40,15 @@ export class ProjectsController {
   @ApiOkResponse({ type: CreateProjectsResponse })
   @UsePipes(new ValidationPipe())
   @HttpCode(HttpStatus.OK)
-  @Patch(':id')
-  update(@CurrentUser('id') userId: string, @Param('id') id: string, @Body() dto: ProjectDto) {
+  @Patch(':project_id')
+  update(@CurrentUser('id') userId: string, @Param('project_id') id: string, @Body() dto: ProjectDto) {
     return this.projectsService.update(userId, id, dto);
   }
 
   @ApiOkResponse({ type: DeleteMessage })
   @HttpCode(HttpStatus.OK)
-  @Delete(':id')
-  remove(@CurrentUser('id') userId: string, @Param('id') id: string) {
+  @Delete(':project_id')
+  remove(@CurrentUser('id') userId: string, @Param('project_id') id: string) {
     return this.projectsService.remove(userId, id);
   }
 }

@@ -1,14 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IBaseExtended } from "./IBase";
+import { FindOneProjectId, IBaseExtended, ProjectId, UserId } from "./IBase";
 import { StatusesResponse } from "./statuses.types";
-
-
-export type SandProjectDto = {
-    readonly userId?: string;
-    readonly name?: string;
-    readonly description?: string;
-    readonly id?: string
-}
 
 export class CreateProjectsResponse extends IBaseExtended {
     @ApiProperty({ description: 'Название проекта', example: "Project 1" })
@@ -80,4 +72,16 @@ export class ProjectsResponse extends CreateProjectsResponse {
         ]
     })
     statuses: StatusesResponse[]
+}
+
+
+
+export type SandUpdateProjectDto = FindOneProjectId & {
+    readonly name?: string;
+    readonly description?: string;
+}
+
+export type SandProjectDto = UserId & {
+    readonly name?: string;
+    readonly description?: string;
 }

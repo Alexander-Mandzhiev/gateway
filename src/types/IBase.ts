@@ -15,3 +15,18 @@ export class DeleteMessage {
     @ApiProperty({ description: 'Удаление прошло успешно!', example: "Объект успешно удален!" })
     message: string
 }
+
+export type UserId = {
+    readonly userId?: string;
+}
+export type FindOneProjectId = UserId & {
+    readonly id?: string
+}
+
+export type ProjectId = UserId & {
+    readonly projectId?: string
+}
+
+export type FindOneId = ProjectId & {
+    readonly id?: string
+}

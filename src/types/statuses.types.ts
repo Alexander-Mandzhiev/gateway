@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IBase } from "./IBase";
+import { FindOneId, IBase, ProjectId } from "./IBase";
 
 export class CreateStatusesResponse extends IBase {
     @ApiProperty({ description: 'Название статуса задачи', example: "to do" })
@@ -33,12 +33,13 @@ export class UpdateOrderStatusesResponse {
     response: []
 }
 
-export type SandStatustDto = {
-    readonly userId?: string;
-    readonly projectId?: string
-    readonly id?: string
+export type SandStatustDto = ProjectId & {
     readonly name?: string;
     readonly order?: string;
+}
+
+export type SandUodateStatusDto = SandStatustDto & {
+    readonly id?: string
 }
 
 export type SandStatustUpdateOrderDto = {

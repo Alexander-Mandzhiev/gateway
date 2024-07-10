@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { TaskDto, UpdateOrderDto } from './dto/task.dto';
 import { ClientProxy } from '@nestjs/microservices';
-import { SandingTask, UpdateTaskOrderDto } from 'src/types/tasks.types';
+import { CreateTaskDto, SandingTask, SandingTaskStatus, SandingTaskStatusId, UpdateTaskDto, UpdateTaskOrderDto } from 'src/types/tasks.types';
 
 @Injectable()
 export class TasksService {
@@ -9,7 +9,7 @@ export class TasksService {
 
   async create(userId: string, dto: TaskDto) {
     try {
-      const sanding: SandingTask = { userId, projectId: dto.projectId, statusId: dto.statusId, name: dto.name, description: dto.description }
+      const sanding: CreateTaskDto = { userId, projectId: dto.projectId, statusId: dto.statusId, name: dto.name, description: dto.description }
       return this.client.send({ cmd: "create-task" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка получения задач! ${error}`, HttpStatus.FORBIDDEN)
@@ -18,7 +18,7 @@ export class TasksService {
 
   async findAll(userId: string, projectId: string, statusId: string) {
     try {
-      const sanding: SandingTask = { userId, projectId, statusId }
+      const sanding: SandingTaskStatus = { userId, projectId, statusId }
       return this.client.send({ cmd: "get-all-tasks" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка получения задач! ${error}`, HttpStatus.FORBIDDEN)
@@ -27,7 +27,7 @@ export class TasksService {
 
   async findOne(userId: string, projectId: string, statusId: string, id: string) {
     try {
-      const sanding: SandingTask = { userId, projectId, statusId, id }
+      const sanding: SandingTaskStatusId = { userId, projectId, statusId, id }
       return this.client.send({ cmd: "get-one-task" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка получения задачи! ${error}`, HttpStatus.FORBIDDEN)
@@ -36,7 +36,7 @@ export class TasksService {
 
   async update(userId: string, id: string, dto: TaskDto) {
     try {
-      const sanding: SandingTask = { userId, id, projectId: dto.projectId, statusId: dto.statusId, name: dto.name, description: dto.description }
+      const sanding: UpdateTaskDto = { userId, id, projectId: dto.projectId, statusId: dto.statusId, name: dto.name, description: dto.description }
       return this.client.send({ cmd: "update-task" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка обновления задачи! ${error}`, HttpStatus.FORBIDDEN)
@@ -45,7 +45,7 @@ export class TasksService {
 
   async remove(userId: string, projectId: string, statusId: string, id: string) {
     try {
-      const sanding: SandingTask = { userId, projectId, statusId, id }
+      const sanding: SandingTaskStatusId = { userId, projectId, statusId, id }
       return this.client.send({ cmd: "delete-task" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка удаления задачи! ${error}`, HttpStatus.FORBIDDEN)

@@ -1,11 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IBase } from "./IBase"
+import { FindOneId, IBase, ProjectId } from "./IBase"
 
-export interface TypeField {
+export type TypeField = {
     string: 'string';
     integer: 'integer';
     enum: 'enum';
 }
+
 export enum EnumTypeField {
     'string',
     'integer',
@@ -20,7 +21,7 @@ export class CreateProjectFieldResponse extends IBase {
     @ApiProperty({ description: 'Уникальный идентификатор проекта', example: "clx25gfmp00037r4g2jg2vete" })
     projectId: string
 
-    @ApiProperty({ description: 'список', example: "string | integer" })
+    @ApiProperty({ description: 'список', example: "string | integer | enum" })
     field: TypeField
 }
 
@@ -144,21 +145,11 @@ export class ResponseEnum {
 }
 
 
-export type SandingProjectIdTaskFields = {
-    readonly userId?: string
-    readonly projectId?: string
-}
-
-export type SandingDeleteTaskFieldDto = SandingProjectIdTaskFields & {
-    readonly id?: string
-}
-
-export type SandingUpdateTaskFieldDto = SandingDeleteTaskFieldDto & {
-    readonly id?: string
+export type SandingUpdateTaskFieldDto = FindOneId & {
     readonly name?: string
 }
 
-export type SandingCreateTaskFieldDto = SandingProjectIdTaskFields & {
+export type SandingCreateTaskFieldDto = ProjectId & {
     readonly name?: string
     readonly field?: TypeField
 }

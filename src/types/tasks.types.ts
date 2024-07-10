@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IBaseExtended } from "./IBase"
+import { FindOneId, IBaseExtended, ProjectId } from "./IBase"
 import { ResponseCreateEnumValues, ResponseTaskIntValues, ResponseTaskStrValues } from "./projectFields.types"
 
 export class CreateTasksResponse extends IBaseExtended {
@@ -86,18 +86,25 @@ export class UpdateOrderTasksResponse {
     response: []
 }
 
-export class SandingTask {
-    readonly userId?: string
-    readonly projectId?: string
+export type SandingTaskStatus = ProjectId & {
     readonly statusId?: string
-    readonly name?: string
-    readonly description?: string
+}
+
+export type SandingTaskStatusId = SandingTaskStatus & {
     readonly id?: string
 }
 
-export type UpdateTaskOrderDto = {
-    readonly userId?: string
-    readonly projectId?: string
+export type SandingTask = {
+    readonly name?: string
+    readonly description?: string
+}
+
+export type CreateTaskDto = SandingTaskStatus & SandingTask
+export type UpdateTaskDto = SandingTaskStatusId & SandingTask
+
+
+
+export type UpdateTaskOrderDto = ProjectId & {
     readonly statusId: string
     readonly ids?: [string]
 }

@@ -1,7 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { TaskFieldDto, UpdateTaskFieldDto } from './dto/task-field.dto';
 import { ClientProxy } from '@nestjs/microservices';
-import { SandingCreateTaskFieldDto, SandingDeleteTaskFieldDto, SandingProjectIdTaskFields, SandingUpdateTaskFieldDto } from 'src/types/projectFields.types';
+import type { SandingCreateTaskFieldDto, SandingUpdateTaskFieldDto } from 'src/types/projectFields.types';
+import type { FindOneId, ProjectId } from 'src/types/IBase';
 
 @Injectable()
 export class TaskFieldsService {
@@ -19,7 +20,7 @@ export class TaskFieldsService {
 
   async findAll(userId: string, projectId: string) {
     try {
-      const sanding: SandingProjectIdTaskFields = { userId, projectId }
+      const sanding: ProjectId = { userId, projectId }
       return this.client.send({ cmd: "get-all-task-field" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка получения полей проекта!`, HttpStatus.BAD_REQUEST)
@@ -37,7 +38,7 @@ export class TaskFieldsService {
 
   async remove(userId: string, projectId: string, id: string) {
     try {
-      const sanding: SandingDeleteTaskFieldDto = { userId, projectId, id }
+      const sanding: FindOneId = { userId, projectId, id }
       return this.client.send({ cmd: "delete-task-field" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка обновления поля проекта! ${error}`, HttpStatus.BAD_REQUEST)

@@ -1,7 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { StatusDto, UpdateOrderDto } from './dto/status.dto';
 import { ClientProxy } from '@nestjs/microservices';
-import { SandStatustDto, SandStatustUpdateOrderDto } from 'src/types/statuses.types';
+import { SandStatustDto, SandStatustUpdateOrderDto, SandUodateStatusDto } from 'src/types/statuses.types';
+import { FindOneId, ProjectId } from 'src/types/IBase';
 
 @Injectable()
 export class StatusesService {
@@ -18,7 +19,7 @@ export class StatusesService {
 
   async findAll(userId: string, projectId: string) {
     try {
-      const sanding: SandStatustDto = { userId, projectId }
+      const sanding: ProjectId = { userId, projectId }
       return this.client.send({ cmd: "get-all-status" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка получения статусов проекта! ${error}`, HttpStatus.FORBIDDEN)
@@ -27,7 +28,7 @@ export class StatusesService {
 
   async findOne(userId: string, projectId: string, id: string) {
     try {
-      const sanding: SandStatustDto = { userId, projectId, id }
+      const sanding: FindOneId = { userId, projectId, id }
       return this.client.send({ cmd: "get-one-status" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка получения статуса проекта! ${error}`, HttpStatus.FORBIDDEN)
@@ -36,7 +37,7 @@ export class StatusesService {
 
   async update(userId: string, id: string, dto: StatusDto) {
     try {
-      const sanding: SandStatustDto = { userId, projectId: dto.projectId, id, name: dto.name }
+      const sanding: SandUodateStatusDto = { userId, projectId: dto.projectId, id, name: dto.name }
       return this.client.send({ cmd: "update-status" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка получения статуса проекта! ${error}`, HttpStatus.FORBIDDEN)
@@ -45,7 +46,7 @@ export class StatusesService {
 
   async remove(userId: string, projectId: string, id: string) {
     try {
-      const sanding: SandStatustDto = { userId, id, projectId }
+      const sanding: FindOneId = { userId, id, projectId }
       return this.client.send({ cmd: "delete-status" }, sanding)
     } catch (error) {
       throw new HttpException(`Произошла ошибка получения статуса проекта! ${error}`, HttpStatus.FORBIDDEN)

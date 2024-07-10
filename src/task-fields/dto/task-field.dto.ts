@@ -16,7 +16,7 @@ export class UpdateTaskFieldDto {
 
 export class TaskFieldDto extends UpdateTaskFieldDto {
 
-    @ApiProperty({ description: 'Описсание проекта', example: "string | integer" })
+    @ApiProperty({ description: 'Описсание проекта', example: "string | integer | enum" })
     @IsNotEmpty()
     @IsEnum(EnumTypeField)
     readonly field: TypeField
