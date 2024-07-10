@@ -1,73 +1,71 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+\\env
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API_PORT=4000
+DATABASE_URL="postgresql://postgres:root@postgres_gateway:5432/users?schema=public"
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+ACCESS_JWT_EXPIRATION_TIME=3000s
+REFRESH_JWT_EXPIRATION_TIME=1
+DOMAIN=localhost
+REFRESH_TOKEN_NAME="refreshToken"
 
-## Description
+JWT_SECRET_KEY="12wgWqbyw43afwef2eWGEg43t2S4qt"
+JWT_REFRESH_TOKEN="5ewgfzhheracqfsszdxz412wgWqbyw43afwef2eWGEg43t2S4qtvt2q32y2f2eWGEWfEWf4efa"
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+RULE_MESSAGE="Данное поле должно быть длиной не менее 2 символов."
+RULE_MESSAGE_LENGTH=2
 
-## Installation
+\\ docker-compose.yml
+\\ запускается из корневой папки с двумя проектами: gateway, tasks
 
-```bash
-$ npm install
-```
+version: "3.0"
 
-## Running the app
+services:
+postgres_gateway:
+container_name: postgres_gateway
+image: postgres
+environment:
+POSTGRES_USER: postgres
+POSTGRES_PASSWORD: root
+volumes: - pgdata:/var/lib/postgresql/data
+ports: - "15432:5432"
+restart: always
 
-```bash
-# development
-$ npm run start
+postgres_tasks:
+container_name: postgres_tasks
+image: postgres
+environment:
+POSTGRES_USER: postgres
+POSTGRES_PASSWORD: root
+volumes: - pgdata:/var/lib/postgresql/data
+ports: - "25432:5432"
+restart: always
 
-# watch mode
-$ npm run start:dev
+rabbitmq:
+container_name: rabbitmq
+image: rabbitmq:3-management
+environment:
+RABBITMQ_DEFAULT_USER: "guest"
+RABBITMQ_DEFAULT_PASS: "guest"
+ports: - "5672:5672" - "15672:15672"
 
-# production mode
-$ npm run start:prod
-```
+gateway:
+build: ./gateway
+container_name: gateway
+volumes: - "./gateway:/src/app"
+working_dir: "/src/app"
+ports: - 4000:4000 - 9229:9229
+command: npm run start
+depends_on: - postgres_gateway - rabbitmq
+restart: always
 
-## Test
+tasks:
+build: ./tasks
+container_name: tasks
+working_dir: "/src/app"
+volumes: - "./tasks:/src/app"
+command: npm run start
+depends_on: - postgres_tasks - rabbitmq
+restart: always
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+volumes:
+pgdata:
